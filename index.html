@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Image Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #00b4d8;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .instructions {
+            background: rgba(0, 180, 216, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+            font-size: 0.95rem;
+            border-left: 4px solid #00b4d8;
+        }
+        
+        .instructions i {
+            color: #00f2fe;
+            margin-right: 8px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .filter-btn {
+            background: linear-gradient(to right, #00b4d8, #0077b6);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(to right, #00b4d8, #0077b6);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(50, 50, 70, 0.5);
+        }
+        
+        tr:nth-child(odd) {
+            background: rgba(40, 40, 60, 0.5);
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(100, 100, 150, 0.3);
+        }
+        
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #00b4d8;
+            background: linear-gradient(45deg, #00b4d8, #90e0ef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .student-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .student-id {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .image-cell {
+            text-align: center;
+            vertical-align: top;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 150px;
+            margin: 0 auto;
+        }
+        
+        .student-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #4a5568;
+            transition: transform 0.3s ease;
+            background: linear-gradient(45deg, #2c3e50, #4a5568);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .student-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+        }
+        
+        .slider-container {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .slider-label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: #90e0ef;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .brightness-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #4a5568;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .brightness-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #00b4d8;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .figure-label {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            color: #a0aec0;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 100, 150, 0.3);
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #90e0ef;
+        }
+        
+        @media (max-width: 1100px) {
+            .container {
+                padding: 15px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                min-width: 150px;
+            }
+            
+            .image-container {
+                width: 130px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .student-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .image-container {
+                width: 110px;
+            }
+            
+            .student-image {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Image Gallery</h1>
+            <p class="subtitle">Browse student submissions with adjustable image brightness</p>
+            
+            <!--<div class="instructions">
+                <p><i class="fas fa-info-circle"></i> This gallery dynamically loads student images from folder structure:</p>
+                <p><i class="fas fa-folder"></i> Folders named as: <code>[S.No]_[Student Name]</code></p>
+                <p><i class="fas fa-image"></i> Images named as: <code>original_1.png</code> to <code>original_5.png</code></p>
+            </div>-->
+        </header>
+        
+        <div class="controls">
+            <input type="text" class="search-box" placeholder="Search by student name..." id="searchInput">
+            <button class="filter-btn" onclick="toggleSortOrder()">
+                <i class="fas fa-sort-alpha-down"></i> Sort by Name
+            </button>
+        </div>
+        
+        <table id="galleryTable">
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Student Name</th>
+                    <th>Figure 01</th>
+                    <th>Figure 02</th>
+                    <th>Figure 03</th>
+                    <th>Figure 04</th>
+                    <th>Figure 05</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be generated by JavaScript -->
+            </tbody>
+        </table>
+        
+        <footer>
+            <p>&copy; All Rights Reserved to <b><u>Aadil Solution.</u></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact: - +91 8862862617</p>
+        </footer>
+    </div>
+
+    <script>
+        // Function to extract student data from folder names
+        function getStudentsFromFolders(folders) {
+            return folders.map(folder => {
+                // Split folder name at the first underscore
+                const firstUnderscore = folder.indexOf('_');
+                if (firstUnderscore === -1) return null;
+                
+                const id = folder.substring(0, firstUnderscore);
+                const name = folder.substring(firstUnderscore + 1).replace(/_/g, ' ');
+                
+                return {
+                    id: id,
+                    name: name,
+                    folder: folder,
+                    images: Array.from({length: 5}, (_, i) => ({
+                        name: `original_${i+1}.png`,
+                        // Relative path to the image in the folder
+                        url: `images/${folder}/original_${i+1}.png`
+                    }))
+                };
+            }).filter(student => student !== null);
+        }
+        
+        // Simulated folder names - REPLACE WITH YOUR ACTUAL FOLDER NAMES
+        const folderNames = [
+            "101_Alex_Johnson",
+            "102_Maria_Garcia",
+            "103_David_Kim",
+            "104_Sophia_Williams",
+            "105_James_Wilson"
+        ];
+        
+        let students = getStudentsFromFolders(folderNames);
+        let sortAscending = true;
+        
+        // Function to generate table rows
+        function generateTableRows(data) {
+            const tbody = document.querySelector('#galleryTable tbody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="no-results">
+                    <i class="fas fa-search"></i> No matching students found
+                </td></tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            
+            data.forEach((student, index) => {
+                const row = document.createElement('tr');
+                
+                // S. No. cell
+                const idCell = document.createElement('td');
+                idCell.textContent = student.id;
+                row.appendChild(idCell);
+                
+                // Student Name cell
+                const nameCell = document.createElement('td');
+                // Get initials for avatar
+                const initials = student.name.split(' ').map(n => n[0]).join('');
+                nameCell.innerHTML = `
+                    <div class="student-info">
+                        <div class="student-avatar">${initials}</div>
+                        <div>
+                            <div class="student-name">${student.name}</div>
+                            <div class="student-id">Folder: ${student.folder}</div>
+                        </div>
+                    </div>
+                `;
+                row.appendChild(nameCell);
+                
+                // Image cells (Figure 01 to Figure 05)
+                for (let i = 0; i < 5; i++) {
+                    const imgCell = document.createElement('td');
+                    imgCell.className = 'image-cell';
+                    
+                    if (i < student.images.length) {
+                        const image = student.images[i];
+                        imgCell.innerHTML = `
+                            <div class="image-container">
+                                <img src="${image.url}" alt="${student.name} - Figure ${i+1}" 
+                                     class="student-image" id="img-${student.id}-${i}"
+                                     onerror="this.onerror=null; this.src='https://via.placeholder.com/150x120?text=Image+Not+Found';">
+                            </div>
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <i class="fas fa-sun"></i> Brightness
+                                </div>
+                                <input type="range" min="0" max="200" value="100" 
+                                       class="brightness-slider"
+                                       oninput="adjustBrightness(this, 'img-${student.id}-${i}')">
+                            </div>
+                            <div class="figure-label">Figure ${i+1}</div>
+                        `;
+                    } else {
+                        imgCell.innerHTML = `<div class="figure-label">Image missing</div>`;
+                    }
+                    
+                    row.appendChild(imgCell);
+                }
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Function to adjust image brightness
+        function adjustBrightness(slider, imageId) {
+            const image = document.getElementById(imageId);
+            const brightnessValue = slider.value;
+            image.style.filter = `brightness(${brightnessValue}%)`;
+        }
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredStudents = students.filter(student => 
+                student.name.toLowerCase().includes(searchTerm) || 
+                student.id.toLowerCase().includes(searchTerm) ||
+                student.folder.toLowerCase().includes(searchTerm)
+            );
+            generateTableRows(filteredStudents);
+        });
+        
+        // Toggle sort order
+        function toggleSortOrder() {
+            sortAscending = !sortAscending;
+            students.sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+                return sortAscending ? 
+                    nameA.localeCompare(nameB) : 
+                    nameB.localeCompare(nameA);
+            });
+            generateTableRows(students);
+            
+            // Update button text
+            const sortBtn = document.querySelector('.filter-btn');
+            sortBtn.innerHTML = sortAscending ? 
+                '<i class="fas fa-sort-alpha-down"></i> Sort by Name' : 
+                '<i class="fas fa-sort-alpha-up"></i> Sort by Name';
+        }
+        
+        // Initialize the table
+        generateTableRows(students);
+    </script>
+</body>
+</html>
