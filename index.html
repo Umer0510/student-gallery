@@ -6,6 +6,17 @@
     <title>Student Image Gallery</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -33,14 +44,14 @@
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #00b4d8;
+            border-bottom: 2px solid var(--primary);
         }
         
         h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(to right, #4facfe, #00f2fe);
+            background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -53,26 +64,53 @@
         }
         
         .instructions {
-            background: rgba(0, 180, 216, 0.2);
+            background: rgba(52, 152, 219, 0.2);
             padding: 15px;
             border-radius: 10px;
             margin: 20px auto;
             max-width: 800px;
             font-size: 0.95rem;
-            border-left: 4px solid #00b4d8;
+            border-left: 4px solid var(--primary);
         }
         
         .instructions i {
-            color: #00f2fe;
+            color: var(--primary);
             margin-right: 8px;
+        }
+        
+        .config-section {
+            background: rgba(39, 174, 96, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px dashed var(--success);
+        }
+        
+        .config-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .config-title i {
+            font-size: 1.5rem;
+            color: var(--success);
         }
         
         .controls {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
-            gap: 15px;
             flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         
         .search-box {
@@ -90,8 +128,8 @@
             color: rgba(255, 255, 255, 0.6);
         }
         
-        .filter-btn {
-            background: linear-gradient(to right, #00b4d8, #0077b6);
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
             border: none;
             padding: 12px 20px;
@@ -99,11 +137,26 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .filter-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, var(--secondary), var(--dark));
+        }
+        
+        .btn-accent {
+            background: linear-gradient(to right, var(--accent), var(--danger));
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, var(--success), #27ae60);
         }
         
         table {
@@ -116,7 +169,7 @@
         }
         
         th {
-            background: linear-gradient(to right, #00b4d8, #0077b6);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             padding: 15px;
             text-align: left;
             font-weight: 600;
@@ -149,13 +202,14 @@
             height: 60px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #00b4d8;
-            background: linear-gradient(45deg, #00b4d8, #90e0ef);
+            border: 2px solid var(--primary);
+            background: linear-gradient(45deg, var(--primary), #90e0ef);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 1.5rem;
+            color: white;
         }
         
         .student-name {
@@ -184,9 +238,9 @@
             height: 120px;
             object-fit: cover;
             border-radius: 8px;
-            border: 2px solid #4a5568;
+            border: 2px solid var(--secondary);
             transition: transform 0.3s ease;
-            background: linear-gradient(45deg, #2c3e50, #4a5568);
+            background: linear-gradient(45deg, var(--secondary), #4a5568);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -198,7 +252,7 @@
         
         .student-image:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
         
         .slider-container {
@@ -221,7 +275,7 @@
             width: 100%;
             height: 8px;
             border-radius: 4px;
-            background: #4a5568;
+            background: var(--secondary);
             outline: none;
             -webkit-appearance: none;
         }
@@ -231,7 +285,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #00b4d8;
+            background: var(--primary);
             cursor: pointer;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
@@ -257,6 +311,27 @@
             padding: 40px;
             font-size: 1.2rem;
             color: #90e0ef;
+        }
+        
+        .status-bar {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-value {
+            font-weight: bold;
+            color: var(--primary);
         }
         
         @media (max-width: 1100px) {
@@ -296,27 +371,77 @@
             .student-image {
                 height: 100px;
             }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-group {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                max-width: 400px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Student Image Gallery</h1>
-            <p class="subtitle">Browse student submissions with adjustable image brightness</p>
+            <h1><i class="fas fa-images"></i> Student Image Gallery</h1>
+            <p class="subtitle">Dynamic gallery with folder detection and image brightness controls</p>
             
-            <!--<div class="instructions">
+            <div class="instructions">
                 <p><i class="fas fa-info-circle"></i> This gallery dynamically loads student images from folder structure:</p>
                 <p><i class="fas fa-folder"></i> Folders named as: <code>[S.No]_[Student Name]</code></p>
                 <p><i class="fas fa-image"></i> Images named as: <code>original_1.png</code> to <code>original_5.png</code></p>
-            </div>-->
+            </div>
         </header>
+        
+        <div class="config-section">
+            <div class="config-title">
+                <i class="fas fa-cogs"></i>
+                <h2>Configuration Instructions</h2>
+            </div>
+            <ol>
+                <li>Create an <code>images</code> folder in your project root</li>
+                <li>Inside <code>images</code>, create folders named like <code>101_John_Doe</code></li>
+                <li>In each student folder, add images named <code>original_1.png</code> to <code>original_5.png</code></li>
+                <li>Update the <code>folderNames</code> array in the script below to match your folder names</li>
+            </ol>
+            <div class="status-bar">
+                <div class="status-item">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Images Path: <span class="status-value">images/</span></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-users"></i>
+                    <span>Students Loaded: <span class="status-value" id="studentCount">0</span></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-image"></i>
+                    <span>Total Images: <span class="status-value" id="imageCount">0</span></span>
+                </div>
+            </div>
+        </div>
         
         <div class="controls">
             <input type="text" class="search-box" placeholder="Search by student name..." id="searchInput">
-            <button class="filter-btn" onclick="toggleSortOrder()">
-                <i class="fas fa-sort-alpha-down"></i> Sort by Name
-            </button>
+            <div class="control-group">
+                <button class="btn" onclick="toggleSortOrder()">
+                    <i class="fas fa-sort-alpha-down"></i> Sort by Name
+                </button>
+                <button class="btn btn-secondary" onclick="refreshGallery()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn btn-accent" onclick="resetAllSliders()">
+                    <i class="fas fa-adjust"></i> Reset Brightness
+                </button>
+            </div>
         </div>
         
         <table id="galleryTable">
@@ -337,7 +462,8 @@
         </table>
         
         <footer>
-            <p>&copy; All Rights Reserved to <b><u>Aadil Solution.</u></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact: - +91 8862862617</p>
+            <p><i class="fas fa-code"></i> Student Image Gallery | Images loaded dynamically from folder structure</p>
+            <p><i class="fas fa-exclamation-triangle"></i> Remember to update folder names in JavaScript for production</p>
         </footer>
     </div>
 
@@ -365,17 +491,31 @@
             }).filter(student => student !== null);
         }
         
-        // Simulated folder names - REPLACE WITH YOUR ACTUAL FOLDER NAMES
+        // ===================================================================
+        // IMPORTANT: UPDATE THIS ARRAY WITH YOUR ACTUAL FOLDER NAMES
+        // ===================================================================
         const folderNames = [
-            "101_Alex_Johnson",
-            "102_Maria_Garcia",
-            "103_David_Kim",
-            "104_Sophia_Williams",
-            "105_James_Wilson"
+            "232_RUBI KUMARI 3312",
+            "234_NITU KUMARI 3052",
+            "251_PINTU KUMAR 7689",
+            "255_USHA KUMARI 7658",
+            "256_KARANTI KUMARI 8908",
+	    "258_KARAN PASWAN 1835",
+	    "265_AVINASH KUMAR 3988",
+	    "270_KHUSHI KUMARI 3389",
+	    "271_PRIYANKA KUMARI 4002"
+
         ];
         
-        let students = getStudentsFromFolders(folderNames);
+        let students = [];
         let sortAscending = true;
+        
+        // Initialize gallery
+        function initGallery() {
+            students = getStudentsFromFolders(folderNames);
+            generateTableRows(students);
+            updateStatusBar();
+        }
         
         // Function to generate table rows
         function generateTableRows(data) {
@@ -390,7 +530,7 @@
             
             tbody.innerHTML = '';
             
-            data.forEach((student, index) => {
+            data.forEach((student) => {
                 const row = document.createElement('tr');
                 
                 // S. No. cell
@@ -450,8 +590,10 @@
         // Function to adjust image brightness
         function adjustBrightness(slider, imageId) {
             const image = document.getElementById(imageId);
-            const brightnessValue = slider.value;
-            image.style.filter = `brightness(${brightnessValue}%)`;
+            if (image) {
+                const brightnessValue = slider.value;
+                image.style.filter = `brightness(${brightnessValue}%)`;
+            }
         }
         
         // Search functionality
@@ -478,14 +620,44 @@
             generateTableRows(students);
             
             // Update button text
-            const sortBtn = document.querySelector('.filter-btn');
+            const sortBtn = document.querySelector('.btn');
             sortBtn.innerHTML = sortAscending ? 
                 '<i class="fas fa-sort-alpha-down"></i> Sort by Name' : 
                 '<i class="fas fa-sort-alpha-up"></i> Sort by Name';
         }
         
-        // Initialize the table
-        generateTableRows(students);
+        // Refresh gallery
+        function refreshGallery() {
+            initGallery();
+            document.getElementById('searchInput').value = '';
+        }
+        
+        // Reset all sliders to default brightness
+        function resetAllSliders() {
+            const sliders = document.querySelectorAll('.brightness-slider');
+            sliders.forEach(slider => {
+                slider.value = 100;
+                const imageId = slider.getAttribute('oninput').match(/'(.*?)'/)[1];
+                const image = document.getElementById(imageId);
+                if (image) {
+                    image.style.filter = 'brightness(100%)';
+                }
+            });
+        }
+        
+        // Update status bar
+        function updateStatusBar() {
+            document.getElementById('studentCount').textContent = students.length;
+            
+            let imageTotal = 0;
+            students.forEach(student => {
+                imageTotal += student.images.length;
+            });
+            document.getElementById('imageCount').textContent = imageTotal;
+        }
+        
+        // Initialize the gallery
+        window.onload = initGallery;
     </script>
 </body>
 </html>
