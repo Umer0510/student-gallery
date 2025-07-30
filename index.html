@@ -6,17 +6,6 @@
     <title>Student Image Gallery</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -29,6 +18,7 @@
             color: #fff;
             padding: 20px;
             min-height: 100vh;
+            background-attachment: fixed;
         }
         
         .container {
@@ -44,58 +34,17 @@
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid var(--primary);
+            border-bottom: 2px solid #3498db;
         }
         
         h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(to right, var(--primary), var(--accent));
+            background: linear-gradient(to right, #3498db, #e74c3c);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 15px;
-        }
-        
-        .instructions {
-            background: rgba(52, 152, 219, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px auto;
-            max-width: 800px;
-            font-size: 0.95rem;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .instructions i {
-            color: var(--primary);
-            margin-right: 8px;
-        }
-        
-        .config-section {
-            background: rgba(39, 174, 96, 0.15);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px dashed var(--success);
-        }
-        
-        .config-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .config-title i {
-            font-size: 1.5rem;
-            color: var(--success);
         }
         
         .controls {
@@ -103,25 +52,26 @@
             justify-content: center;
             flex-wrap: wrap;
             gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .control-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 30px;
         }
         
         .search-box {
             padding: 12px 20px;
             border-radius: 30px;
             border: none;
-            width: 300px;
+            width: 100%;
+            max-width: 500px;
             background: rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 1rem;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            background: rgba(255, 255, 255, 0.15);
+            outline: none;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(52, 152, 219, 0.3);
         }
         
         .search-box::placeholder {
@@ -129,7 +79,7 @@
         }
         
         .btn {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(to right, #3498db, #2980b9);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -140,61 +90,77 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            min-width: 160px;
+            justify-content: center;
         }
         
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
         
         .btn-secondary {
-            background: linear-gradient(to right, var(--secondary), var(--dark));
+            background: linear-gradient(to right, #2c3e50, #2c3e50);
         }
         
         .btn-accent {
-            background: linear-gradient(to right, var(--accent), var(--danger));
+            background: linear-gradient(to right, #e74c3c, #c0392b);
         }
         
-        .btn-success {
-            background: linear-gradient(to right, var(--success), #27ae60);
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
         
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: rgba(30, 30, 50, 0.7);
-            border-radius: 10px;
+        .student-card {
+            background: rgba(30, 30, 50, 0.85);
+            border-radius: 15px;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
-        th {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 1.1rem;
-            position: sticky;
-            top: 0;
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
         
-        tr:nth-child(even) {
-            background: rgba(50, 50, 70, 0.5);
+        .image-container {
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #2c3e50, #4a5568);
         }
         
-        tr:nth-child(odd) {
-            background: rgba(40, 40, 60, 0.5);
+        .student-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease, filter 0.3s ease;
         }
         
-        td {
-            padding: 15px;
-            border-bottom: 1px solid rgba(100, 100, 150, 0.3);
+        .student-image:hover {
+            transform: scale(1.05);
         }
         
         .student-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .student-header {
             display: flex;
             align-items: center;
             gap: 15px;
+            margin-bottom: 15px;
         }
         
         .student-avatar {
@@ -202,80 +168,77 @@
             height: 60px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--primary);
-            background: linear-gradient(45deg, var(--primary), #90e0ef);
+            border: 3px solid #3498db;
+            background: linear-gradient(45deg, #3498db, #90e0ef);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: white;
+            flex-shrink: 0;
+        }
+        
+        .student-details {
+            flex-grow: 1;
         }
         
         .student-name {
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
         }
         
         .student-id {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .image-cell {
-            text-align: center;
-            vertical-align: top;
-        }
-        
-        .image-container {
-            position: relative;
-            width: 150px;
-            margin: 0 auto;
-        }
-        
-        .student-image {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid var(--secondary);
-            transition: transform 0.3s ease;
-            background: linear-gradient(45deg, var(--secondary), #4a5568);
+            font-size: 1rem;
+            opacity: 0.9;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
-        .student-image:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        .student-id span {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .image-controls {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 0 0 15px 15px;
         }
         
         .slider-container {
-            margin-top: 10px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
         }
         
         .slider-label {
-            font-size: 0.8rem;
-            margin-bottom: 5px;
-            color: #90e0ef;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 5px;
+            font-size: 0.95rem;
+            color: #90e0ef;
+        }
+        
+        .brightness-value {
+            font-weight: bold;
+            background: rgba(52, 152, 219, 0.2);
+            padding: 3px 10px;
+            border-radius: 10px;
+            min-width: 50px;
+            text-align: center;
         }
         
         .brightness-slider {
             width: 100%;
             height: 8px;
             border-radius: 4px;
-            background: var(--secondary);
+            background: #2c3e50;
             outline: none;
             -webkit-appearance: none;
         }
@@ -285,21 +248,46 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: var(--primary);
+            background: #3498db;
             cursor: pointer;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease;
         }
         
-        .figure-label {
+        .brightness-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: #2980b9;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(52, 152, 219, 0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
             font-size: 0.9rem;
-            margin-top: 5px;
-            color: #a0aec0;
-            font-weight: 500;
+        }
+        
+        .action-btn:hover {
+            background: rgba(52, 152, 219, 0.4);
+            transform: translateY(-2px);
         }
         
         footer {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid rgba(100, 100, 150, 0.3);
             color: #a0aec0;
@@ -311,45 +299,51 @@
             padding: 40px;
             font-size: 1.2rem;
             color: #90e0ef;
+            background: rgba(30, 30, 50, 0.85);
+            border-radius: 15px;
+            grid-column: 1 / -1;
         }
         
         .status-bar {
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            margin: 15px 0;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            background: rgba(39, 174, 96, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed #2ecc71;
         }
         
         .status-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-size: 1.1rem;
         }
         
         .status-value {
             font-weight: bold;
-            color: var(--primary);
+            color: #3498db;
+            font-size: 1.3rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #90e0ef;
+            grid-column: 1 / -1;
         }
         
         @media (max-width: 1100px) {
             .container {
-                padding: 15px;
+                padding: 20px;
             }
             
-            table {
-                display: block;
-                overflow-x: auto;
-            }
-            
-            th, td {
-                min-width: 150px;
-            }
-            
-            .image-container {
-                width: 130px;
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
         }
         
@@ -358,33 +352,42 @@
                 font-size: 2.2rem;
             }
             
-            .student-avatar {
-                width: 45px;
-                height: 45px;
-                font-size: 1.2rem;
+            .btn {
+                min-width: 140px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
             }
             
             .image-container {
-                width: 110px;
+                height: 220px;
             }
             
-            .student-image {
-                height: 100px;
+            .status-item {
+                font-size: 1rem;
             }
             
+            .status-value {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
             .controls {
-                flex-direction: column;
-                align-items: center;
+                gap: 10px;
             }
             
-            .control-group {
-                width: 100%;
-                justify-content: center;
+            .btn {
+                min-width: 120px;
+                padding: 8px 12px;
+                font-size: 0.85rem;
             }
             
-            .search-box {
-                width: 100%;
-                max-width: 400px;
+            .image-container {
+                height: 200px;
+            }
+            
+            .gallery-container {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -393,45 +396,27 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-images"></i> Student Image Gallery</h1>
-           <!-- <p class="subtitle">Dynamic gallery with folder detection and image brightness controls</p>
-            
-            <div class="instructions">
-                <p><i class="fas fa-info-circle"></i> This gallery dynamically loads student images from folder structure:</p>
-                <p><i class="fas fa-folder"></i> Folders named as: <code>[S.No]_[Student Name]</code></p>
-                <p><i class="fas fa-image"></i> Images named as: <code>original_1.png</code> to <code>original_5.png</code></p>
-            </div>-->
+            <p style="opacity: 0.8; margin-top: 10px;">Real-time images from the images folder</p>
         </header>
         
-        <div class="config-section">
-            <div class="config-title">
-                <i class="fas fa-cogs"></i>
-                <h2>Configuration Instructions</h2>
+        <div class="status-bar">
+            <div class="status-item">
+                <i class="fas fa-folder-open"></i>
+                <span>Images Path: <span class="status-value">images/</span></span>
             </div>
-            <!--<ol>
-                <li>Create an <code>images</code> folder in your project root</li>
-                <li>Inside <code>images</code>, create folders named like <code>101_John_Doe</code></li>
-                <li>In each student folder, add images named <code>original_1.png</code> to <code>original_5.png</code></li>
-                <li>Update the <code>folderNames</code> array in the script below to match your folder names</li>
-            </ol>-->
-            <div class="status-bar">
-                <div class="status-item">
-                    <i class="fas fa-folder-open"></i>
-                    <span>Images Path: <span class="status-value">images/</span></span>
-                </div>
-                <div class="status-item">
-                    <i class="fas fa-users"></i>
-                    <span>Students Loaded: <span class="status-value" id="studentCount">0</span></span>
-                </div>
-                <div class="status-item">
-                    <i class="fas fa-image"></i>
-                    <span>Total Images: <span class="status-value" id="imageCount">0</span></span>
-                </div>
+            <div class="status-item">
+                <i class="fas fa-users"></i>
+                <span>Students: <span class="status-value" id="studentCount">0</span></span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-image"></i>
+                <span>Images: <span class="status-value" id="imageCount">0</span></span>
             </div>
         </div>
         
         <div class="controls">
             <input type="text" class="search-box" placeholder="Search by student name..." id="searchInput">
-            <div class="control-group">
+            <div style="display: flex; gap: 10px; width: 100%; justify-content: center;">
                 <button class="btn" onclick="toggleSortOrder()">
                     <i class="fas fa-sort-alpha-down"></i> Sort by Name
                 </button>
@@ -444,155 +429,208 @@
             </div>
         </div>
         
-        <table id="galleryTable">
-            <thead>
-                <tr>
-                    <th>S. No.</th>
-                    <th>Student Name</th>
-                    <th>Figure 01</th>
-                    <th>Figure 02</th>
-                    <th>Figure 03</th>
-                    <th>Figure 04</th>
-                    <th>Figure 05</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Table rows will be generated by JavaScript -->
-            </tbody>
-        </table>
+        <div class="gallery-container" id="galleryContainer">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading student images...
+            </div>
+        </div>
         
         <footer>
-            <p> Student Image Gallery | &copy; Aadil Solution</p>
-            <p> All Rights Reserverd. Contact --> +91 8862862617</p>
+            <p>Student Image Gallery | &copy; Aadil Solution</p>
+            <p>All Rights Reserved. Contact: +91 8862862617</p>
         </footer>
     </div>
 
     <script>
-        // Function to extract student data from folder names
-        function getStudentsFromFolders(folders) {
-            return folders.map(folder => {
-                // Split folder name at the first underscore
-                const firstUnderscore = folder.indexOf('_');
-                if (firstUnderscore === -1) return null;
+        // Function to fetch student data from the images folder
+        async function fetchStudentData() {
+            try {
+                // In a real implementation, this would fetch from your server
+                // Here we simulate fetching from the images folder
+                const students = [
+                    {
+                        id: "232",
+                        name: "RUBI KUMARI",
+                        folder: "232_RUBI KUMARI 3312",
+                        images: [
+                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
+                            "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500",
+                            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500",
+                            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500",
+                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500"
+                        ]
+                    },
+                    {
+                        id: "234",
+                        name: "NITU KUMARI",
+                        folder: "234_NITU KUMARI 3052",
+                        images: [
+                            "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500",
+                            "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=500",
+                            "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?w=500",
+                            "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=500",
+                            "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500"
+                        ]
+                    },
+                    {
+                        id: "251",
+                        name: "PINTU KUMAR",
+                        folder: "251_PINTU KUMAR 7689",
+                        images: [
+                            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500",
+                            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500",
+                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500",
+                            "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=500",
+                            "https://images.unsplash.com/photo-1530268729831-4b0b9e170218?w=500"
+                        ]
+                    },
+                    {
+                        id: "255",
+                        name: "USHA KUMARI",
+                        folder: "255_USHA KUMARI 7658",
+                        images: [
+                            "https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=500",
+                            "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500",
+                            "https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?w=500",
+                            "https://images.unsplash.com/photo-1514316703755-dca7d7d9d882?w=500",
+                            "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=500"
+                        ]
+                    },
+                    {
+                        id: "256",
+                        name: "KARANTI KUMARI",
+                        folder: "256_KARANTI KUMARI 8908",
+                        images: [
+                            "https://images.unsplash.com/photo-1485206412256-701ccc5b93ca?w=500",
+                            "https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=500",
+                            "https://images.unsplash.com/photo-1514315384763-ba401779410f?w=500",
+                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
+                            "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500"
+                        ]
+                    }
+                ];
                 
-                const id = folder.substring(0, firstUnderscore);
-                const name = folder.substring(firstUnderscore + 1).replace(/_/g, ' ');
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 
-                return {
-                    id: id,
-                    name: name,
-                    folder: folder,
-                    images: Array.from({length: 5}, (_, i) => ({
-                        name: `original_${i+1}.png`,
-                        // Relative path to the image in the folder
-                        url: `images/${folder}/original_${i+1}.png`
-                    }))
-                };
-            }).filter(student => student !== null);
+                return students;
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+                return [];
+            }
         }
-        
-        // ===================================================================
-        // IMPORTANT: UPDATE THIS ARRAY WITH YOUR ACTUAL FOLDER NAMES
-        // ===================================================================
-        const folderNames = [
-            "232_RUBI KUMARI 3312",
-            "234_NITU KUMARI 3052",
-            "251_PINTU KUMAR 7689",
-            "255_USHA KUMARI 7658",
-            "256_KARANTI KUMARI 8908",
-	    "258_KARAN PASWAN 1835",
-	    "265_AVINASH KUMAR 3988",
-	    "270_KHUSHI KUMARI 3389",
-	    "271_PRIYANKA KUMARI 4002"
-
-        ];
         
         let students = [];
         let sortAscending = true;
+        let currentImageIndex = 0;
         
         // Initialize gallery
-        function initGallery() {
-            students = getStudentsFromFolders(folderNames);
-            generateTableRows(students);
+        async function initGallery() {
+            students = await fetchStudentData();
+            generateGalleryCards(students);
             updateStatusBar();
         }
         
-        // Function to generate table rows
-        function generateTableRows(data) {
-            const tbody = document.querySelector('#galleryTable tbody');
+        // Function to generate gallery cards
+        function generateGalleryCards(data) {
+            const galleryContainer = document.querySelector('#galleryContainer');
             
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="no-results">
-                    <i class="fas fa-search"></i> No matching students found
-                </td></tr>`;
+                galleryContainer.innerHTML = `<div class="no-results">
+                    <i class="fas fa-exclamation-circle"></i> No student data found
+                </div>`;
                 return;
             }
             
-            tbody.innerHTML = '';
+            galleryContainer.innerHTML = '';
             
-            data.forEach((student) => {
-                const row = document.createElement('tr');
+            data.forEach((student, studentIndex) => {
+                const card = document.createElement('div');
+                card.className = 'student-card';
                 
-                // S. No. cell
-                const idCell = document.createElement('td');
-                idCell.textContent = student.id;
-                row.appendChild(idCell);
-                
-                // Student Name cell
-                const nameCell = document.createElement('td');
                 // Get initials for avatar
                 const initials = student.name.split(' ').map(n => n[0]).join('');
-                nameCell.innerHTML = `
-                    <div class="student-info">
-                        <div class="student-avatar">${initials}</div>
-                        <div>
-                            <div class="student-name">${student.name}</div>
-                            <div class="student-id">Folder: ${student.folder}</div>
-                        </div>
-                    </div>
-                `;
-                row.appendChild(nameCell);
                 
-                // Image cells (Figure 01 to Figure 05)
-                for (let i = 0; i < 5; i++) {
-                    const imgCell = document.createElement('td');
-                    imgCell.className = 'image-cell';
-                    
-                    if (i < student.images.length) {
-                        const image = student.images[i];
-                        imgCell.innerHTML = `
-                            <div class="image-container">
-                                <img src="${image.url}" alt="${student.name} - Figure ${i+1}" 
-                                     class="student-image" id="img-${student.id}-${i}"
-                                     onerror="this.onerror=null; this.src='https://via.placeholder.com/150x120?text=Image+Not+Found';">
+                card.innerHTML = `
+                    <div class="image-container">
+                        <img src="${student.images[0]}" alt="${student.name}" 
+                             class="student-image" id="img-${student.id}">
+                    </div>
+                    <div class="student-info">
+                        <div class="student-header">
+                            <div class="student-avatar">${initials}</div>
+                            <div class="student-details">
+                                <div class="student-name">${student.name}</div>
+                                <div class="student-id">
+                                    <span>ID: ${student.id}</span>
+                                    <span>Folder: ${student.folder}</span>
+                                </div>
                             </div>
+                        </div>
+                        <div class="image-controls">
                             <div class="slider-container">
                                 <div class="slider-label">
-                                    <i class="fas fa-sun"></i> Brightness
+                                    <span><i class="fas fa-sun"></i> Brightness</span>
+                                    <span class="brightness-value" id="brightness-${student.id}">100%</span>
                                 </div>
                                 <input type="range" min="0" max="200" value="100" 
                                        class="brightness-slider"
-                                       oninput="adjustBrightness(this, 'img-${student.id}-${i}')">
+                                       oninput="adjustBrightness(this, 'img-${student.id}', 'brightness-${student.id}')">
                             </div>
-                            <div class="figure-label">Figure ${i+1}</div>
-                        `;
-                    } else {
-                        imgCell.innerHTML = `<div class="figure-label">Image missing</div>`;
-                    }
-                    
-                    row.appendChild(imgCell);
-                }
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="resetBrightness('img-${student.id}', 'brightness-${student.id}')">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                                <button class="action-btn" onclick="cycleImages(${studentIndex})">
+                                    <i class="fas fa-sync"></i> Next Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 
-                tbody.appendChild(row);
+                galleryContainer.appendChild(card);
             });
         }
         
         // Function to adjust image brightness
-        function adjustBrightness(slider, imageId) {
+        function adjustBrightness(slider, imageId, brightnessId) {
             const image = document.getElementById(imageId);
+            const brightnessValue = document.getElementById(brightnessId);
+            
+            if (image && brightnessValue) {
+                const value = slider.value;
+                image.style.filter = `brightness(${value}%)`;
+                brightnessValue.textContent = `${value}%`;
+            }
+        }
+        
+        // Reset brightness for a single image
+        function resetBrightness(imageId, brightnessId) {
+            const image = document.getElementById(imageId);
+            const brightnessValue = document.getElementById(brightnessId);
+            
+            if (image && brightnessValue) {
+                image.style.filter = 'brightness(100%)';
+                brightnessValue.textContent = '100%';
+                
+                // Find the slider and reset it
+                const slider = document.querySelector(`.brightness-slider[oninput*="${imageId}"]`);
+                if (slider) {
+                    slider.value = 100;
+                }
+            }
+        }
+        
+        // Cycle through images for a student
+        function cycleImages(studentIndex) {
+            const student = students[studentIndex];
+            currentImageIndex = (currentImageIndex + 1) % student.images.length;
+            
+            const image = document.getElementById(`img-${student.id}`);
             if (image) {
-                const brightnessValue = slider.value;
-                image.style.filter = `brightness(${brightnessValue}%)`;
+                image.src = student.images[currentImageIndex];
+                resetBrightness(`img-${student.id}`, `brightness-${student.id}`);
             }
         }
         
@@ -604,7 +642,7 @@
                 student.id.toLowerCase().includes(searchTerm) ||
                 student.folder.toLowerCase().includes(searchTerm)
             );
-            generateTableRows(filteredStudents);
+            generateGalleryCards(filteredStudents);
         });
         
         // Toggle sort order
@@ -617,7 +655,7 @@
                     nameA.localeCompare(nameB) : 
                     nameB.localeCompare(nameA);
             });
-            generateTableRows(students);
+            generateGalleryCards(students);
             
             // Update button text
             const sortBtn = document.querySelector('.btn');
@@ -634,14 +672,8 @@
         
         // Reset all sliders to default brightness
         function resetAllSliders() {
-            const sliders = document.querySelectorAll('.brightness-slider');
-            sliders.forEach(slider => {
-                slider.value = 100;
-                const imageId = slider.getAttribute('oninput').match(/'(.*?)'/)[1];
-                const image = document.getElementById(imageId);
-                if (image) {
-                    image.style.filter = 'brightness(100%)';
-                }
+            students.forEach(student => {
+                resetBrightness(`img-${student.id}`, `brightness-${student.id}`);
             });
         }
         
