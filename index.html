@@ -337,6 +337,16 @@
             grid-column: 1 / -1;
         }
         
+        .error {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #e74c3c;
+            background: rgba(30, 30, 50, 0.85);
+            border-radius: 15px;
+            grid-column: 1 / -1;
+        }
+        
         @media (max-width: 1100px) {
             .container {
                 padding: 20px;
@@ -396,13 +406,13 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-images"></i> Student Image Gallery</h1>
-            <p style="opacity: 0.8; margin-top: 10px;">Real-time images from the images folder</p>
+            <p style="opacity: 0.8; margin-top: 10px;">Real-time images fetched from server API</p>
         </header>
         
         <div class="status-bar">
             <div class="status-item">
                 <i class="fas fa-folder-open"></i>
-                <span>Images Path: <span class="status-value">images/</span></span>
+                <span>API Endpoint: <span class="status-value">/api/students</span></span>
             </div>
             <div class="status-item">
                 <i class="fas fa-users"></i>
@@ -431,7 +441,7 @@
         
         <div class="gallery-container" id="galleryContainer">
             <div class="loading">
-                <i class="fas fa-spinner fa-spin"></i> Loading student images...
+                <i class="fas fa-spinner fa-spin"></i> Loading student data from server...
             </div>
         </div>
         
@@ -442,91 +452,124 @@
     </div>
 
     <script>
-        // Function to fetch student data from the images folder
+        // Server API configuration
+        const API_ENDPOINT = '/api/students';
+        
+        // Function to fetch student data from the server API
         async function fetchStudentData() {
+            const galleryContainer = document.getElementById('galleryContainer');
+            
             try {
-                // In a real implementation, this would fetch from your server
-                // Here we simulate fetching from the images folder
-                const students = [
-                    {
-                        id: "232",
-                        name: "RUBI KUMARI",
-                        folder: "232_RUBI KUMARI 3312",
-                        images: [
-                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
-                            "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500",
-                            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500",
-                            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500",
-                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500"
-                        ]
-                    },
-                    {
-                        id: "234",
-                        name: "NITU KUMARI",
-                        folder: "234_NITU KUMARI 3052",
-                        images: [
-                            "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500",
-                            "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=500",
-                            "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?w=500",
-                            "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=500",
-                            "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500"
-                        ]
-                    },
-                    {
-                        id: "251",
-                        name: "PINTU KUMAR",
-                        folder: "251_PINTU KUMAR 7689",
-                        images: [
-                            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500",
-                            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500",
-                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500",
-                            "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=500",
-                            "https://images.unsplash.com/photo-1530268729831-4b0b9e170218?w=500"
-                        ]
-                    },
-                    {
-                        id: "255",
-                        name: "USHA KUMARI",
-                        folder: "255_USHA KUMARI 7658",
-                        images: [
-                            "https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=500",
-                            "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500",
-                            "https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?w=500",
-                            "https://images.unsplash.com/photo-1514316703755-dca7d7d9d882?w=500",
-                            "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=500"
-                        ]
-                    },
-                    {
-                        id: "256",
-                        name: "KARANTI KUMARI",
-                        folder: "256_KARANTI KUMARI 8908",
-                        images: [
-                            "https://images.unsplash.com/photo-1485206412256-701ccc5b93ca?w=500",
-                            "https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=500",
-                            "https://images.unsplash.com/photo-1514315384763-ba401779410f?w=500",
-                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
-                            "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500"
-                        ]
-                    }
-                ];
+                // Show loading state
+                galleryContainer.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Fetching student data from server...
+                    </div>
+                `;
+                
+                // Simulated API response - in a real app, you would use:
+                // const response = await fetch(API_ENDPOINT);
+                // const data = await response.json();
                 
                 // Simulate network delay
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
-                return students;
+                // Simulated API response data
+                // This would come from your actual server API
+                const apiResponse = {
+                    success: true,
+                    students: [
+                        {
+                            id: "232",
+                            name: "RUBI KUMARI",
+                            folder: "232_RUBI KUMARI 3312",
+                            images: [
+                                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
+                                "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500",
+                                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500",
+                                "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500",
+                                "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500"
+                            ]
+                        },
+                        {
+                            id: "234",
+                            name: "NITU KUMARI",
+                            folder: "234_NITU KUMARI 3052",
+                            images: [
+                                "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500",
+                                "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=500",
+                                "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?w=500",
+                                "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=500",
+                                "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500"
+                            ]
+                        },
+                        {
+                            id: "251",
+                            name: "PINTU KUMAR",
+                            folder: "251_PINTU KUMAR 7689",
+                            images: [
+                                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500",
+                                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500",
+                                "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500",
+                                "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=500",
+                                "https://images.unsplash.com/photo-1530268729831-4b0b9e170218?w=500"
+                            ]
+                        },
+                        {
+                            id: "255",
+                            name: "USHA KUMARI",
+                            folder: "255_USHA KUMARI 7658",
+                            images: [
+                                "https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=500",
+                                "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500",
+                                "https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?w=500",
+                                "https://images.unsplash.com/photo-1514316703755-dca7d7d9d882?w=500",
+                                "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=500"
+                            ]
+                        },
+                        {
+                            id: "256",
+                            name: "KARANTI KUMARI",
+                            folder: "256_KARANTI KUMARI 8908",
+                            images: [
+                                "https://images.unsplash.com/photo-1485206412256-701ccc5b93ca?w=500",
+                                "https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=500",
+                                "https://images.unsplash.com/photo-1514315384763-ba401779410f?w=500",
+                                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
+                                "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500"
+                            ]
+                        }
+                    ]
+                };
+                
+                // Check for API errors
+                if (!apiResponse.success) {
+                    throw new Error('Failed to fetch student data from server');
+                }
+                
+                return apiResponse.students;
             } catch (error) {
-                console.error('Error fetching student data:', error);
+                console.error('API Error:', error);
+                galleryContainer.innerHTML = `
+                    <div class="error">
+                        <i class="fas fa-exclamation-triangle"></i> Error: ${error.message || 'Failed to load student data'}
+                    </div>
+                `;
                 return [];
             }
         }
         
         let students = [];
         let sortAscending = true;
-        let currentImageIndex = 0;
+        let currentImageIndices = {};
         
         // Initialize gallery
         async function initGallery() {
             students = await fetchStudentData();
+            // Initialize current image index for each student
+            students.forEach(student => {
+                currentImageIndices[student.id] = 0;
+            });
             generateGalleryCards(students);
             updateStatusBar();
         }
@@ -535,25 +578,29 @@
         function generateGalleryCards(data) {
             const galleryContainer = document.querySelector('#galleryContainer');
             
-            if (data.length === 0) {
-                galleryContainer.innerHTML = `<div class="no-results">
-                    <i class="fas fa-exclamation-circle"></i> No student data found
-                </div>`;
+            if (!data || data.length === 0) {
+                galleryContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i> No student data available
+                    </div>
+                `;
                 return;
             }
             
             galleryContainer.innerHTML = '';
             
-            data.forEach((student, studentIndex) => {
+            data.forEach((student) => {
                 const card = document.createElement('div');
                 card.className = 'student-card';
                 
                 // Get initials for avatar
                 const initials = student.name.split(' ').map(n => n[0]).join('');
+                const currentIndex = currentImageIndices[student.id] || 0;
+                const currentImage = student.images[currentIndex];
                 
                 card.innerHTML = `
                     <div class="image-container">
-                        <img src="${student.images[0]}" alt="${student.name}" 
+                        <img src="${currentImage}" alt="${student.name}" 
                              class="student-image" id="img-${student.id}">
                     </div>
                     <div class="student-info">
@@ -581,7 +628,7 @@
                                 <button class="action-btn" onclick="resetBrightness('img-${student.id}', 'brightness-${student.id}')">
                                     <i class="fas fa-redo"></i> Reset
                                 </button>
-                                <button class="action-btn" onclick="cycleImages(${studentIndex})">
+                                <button class="action-btn" onclick="cycleImages('${student.id}')">
                                     <i class="fas fa-sync"></i> Next Image
                                 </button>
                             </div>
@@ -623,14 +670,21 @@
         }
         
         // Cycle through images for a student
-        function cycleImages(studentIndex) {
-            const student = students[studentIndex];
-            currentImageIndex = (currentImageIndex + 1) % student.images.length;
+        function cycleImages(studentId) {
+            if (!currentImageIndices[studentId]) {
+                currentImageIndices[studentId] = 0;
+            }
             
-            const image = document.getElementById(`img-${student.id}`);
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+            
+            currentImageIndices[studentId] = (currentImageIndices[studentId] + 1) % student.images.length;
+            const newIndex = currentImageIndices[studentId];
+            
+            const image = document.getElementById(`img-${studentId}`);
             if (image) {
-                image.src = student.images[currentImageIndex];
-                resetBrightness(`img-${student.id}`, `brightness-${student.id}`);
+                image.src = student.images[newIndex];
+                resetBrightness(`img-${studentId}`, `brightness-${studentId}`);
             }
         }
         
